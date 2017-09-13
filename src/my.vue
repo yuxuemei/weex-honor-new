@@ -1,6 +1,6 @@
 <template>
 	<scroller>
-		<div class="login-bg">
+		<div class="login-my-bg" :style="{'height':allH}">
 		    <image src="http://oslg9bt6h.bkt.clouddn.com/honor/img/my-bg.jpg" class="bg-img absolute" style="width: 750px;height: 1218px;"></image>
 		    <div  class="my-text relative">
 		    	<image src="http://oslg9bt6h.bkt.clouddn.com/honor/img/home-text.png" style="width: 750px;height: 213px;"></image>
@@ -20,19 +20,19 @@
 		    	<image class="honor-title-img" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/honor-title1.png"></image>
 		    	<div class="relative">
 		    		<image class="honor-box-bg absolute" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/honor-box.png"></image>
-		    		<div style="height:225px;margin-top:60px;padding-left: 30px;padding-top: 30px;padding-right: 30px;padding-bottom: 35px;overflow: auto;">
+		    		<scroller style="height:225px;margin-top:60px;padding-left: 30px;padding-top: 30px;padding-right: 30px;padding-bottom: 35px;overflow: auto;">
 		    			<ul>
 		    				<li class="row" style="height:32px;width:574px;" v-for="(tag,index) in tagList" :key="index">
-		    					<text class="honor-title" v-text="tag.title"></text>
-		    					<text class="honor-text" v-text="tag.time"></text>
+		    					<text class="honor-title">{{tag.title}}</text>
+		    					<text class="honor-text">{{tag.time}}</text>
 		    				</li>
 		    			</ul>	
-		    		</div>
+		    		</scroller>
 		    	</div>
 		    </div>
 		    <div class="box">
 		    	<image class="honor-title-img" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/honor-title2.png"></image>
-		    	<div class="relative" style="margin-top:30px;" v-for="(honor_item,index) in myHonorList" :key="index">
+		    	<div class="relative" style="margin-top:30px;margin-bottom:60px;" v-for="(honor_item,index) in myHonorList" :key="index">
 		    		<image class="team-box-bg absolute" v-if="honor_item.honor_id == 1" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/gold-box-bg.png"></image>
 		    		<image class="team-box-bg absolute" v-if="honor_item.honor_id == 2" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/silver-box-bg.png"></image>
 		    		<image class="team-box-bg absolute" v-if="honor_item.honor_id == 3" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/copper-box-bg.png"></image>
@@ -43,7 +43,7 @@
 		    			<div class="team_item">
 		    			    <div class="row">
 			    			    <text class="team-text">我的战队成员：</text>
-			    			    <text class="team-text-number" v-text="honor_item.total_people"></text>
+			    			    <text class="team-text-number">{{honor_item.total_people}}</text>
 			    			    <text class="team-text">人</text>
 		    			    </div>
 		    				<image class="opera-img absolute" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/copy-btn.png"></image>
@@ -56,11 +56,11 @@
 		    		</div>
 		    		<div class="row center" style="margin-top:100px;">
 		    			<text class="code_text center">我的邀请码：</text>
-		    			<text class="code_text_value center" v-text="honor_item.formcode"></text>
+		    			<text class="code_text_value center">{{honor_item.formcode}}</text>
 		    		</div>
 		    	</div>
 		    </div>
-		    <div class="center" style="margin-left:58px;margin-top:70px;margin-bottom:30px;">
+		    <div class="center" style="margin-left:58px;margin-top:30px;margin-bottom:30px;">
 		    	<image class="recharge-btn" @click="enterRecharge" src="http://oslg9bt6h.bkt.clouddn.com/honor/img/recharge-btn.png"></image>
 		    </div>
 		</div>
@@ -68,7 +68,7 @@
 </template>
 <script>
     /*require('./clipboard.min.js')*/
-    import common from './common';
+    import common from './common'
 	export default{
 		data:function(){
 			return{
@@ -77,7 +77,8 @@
 				myHonorList:[],
 				tagList:[],
 				my:{},
-				mealSum:10
+				mealSum:10,
+				allH:1700
 			}
 		},
 		mounted:function(){
@@ -106,10 +107,12 @@
                 	callback:respose=>{
                         this.honor = respose.data.data; 
                         this.myHonorList = respose.data.data.honor;
-                        for (var j = 0; j < this.myHonorList.length; j++) {
+                        var len = this.myHonorList.length;
+                        for (var j = 0; j < len; j++) {
                             this.mealSum+=this.myHonorList[j].total_medal;
                         }
                         this.my = respose.data.data.my;
+                        this.allH = this.allH +((len-1)*460);
 	                }
                 })
             },
@@ -138,9 +141,8 @@
 		text-align: center;
 		justify-content: center;/*水平居中*/
 	}
-	.login-bg{
+	.login-my-bg{
 		width: 750px;
-		height: 2100px;
 		background-color: #000;
 	}
 	.bg-img{

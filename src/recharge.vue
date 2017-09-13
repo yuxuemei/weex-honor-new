@@ -55,17 +55,18 @@
         var index = 0;
         common.storage.getItem("index", event => {
             index = event.data;
+            this.getMeal(index);
         });
         //获取邀请码
-        var formcode = common.getQueryString("formcode");
+        //var formcode = common.getQueryString("formcode");
         //有索引且没有邀请码利用索引获取套餐id
-        if(index >= 0 && formcode == undefined){
+        /*if(index >= 0 && formcode == undefined){
             this.getMeal(index);
         }else{
             //根据邀请码获取用户和相关套餐信息
             this.formcode = formcode;
             this.getUser();
-        }
+        }*/
     },
     methods: {
         getMeal(index) {
@@ -111,24 +112,30 @@
                 honor_id : this.honorObj.id,
                 form_uid : this.form_uid,
             }
-            var isWchat = common.isWechat();
+            /*var isWchat = common.isWechat();
             if(isWchat){ 
                 param.payment_type = 3;  //微信浏览器使用APP支付
                 param.openid = localStorage.openId;
-            }else{
+            }else{*/
                 param.payment_type = 2;  //非微信浏览器使用支付宝
-            }
+            //}
             common.post({
 	            url:"api/honor/payment",
 	            param:JSON.stringify(param),
 	            callback:respose=>{
 	                var data = respose.data.data;
-                    if(isWchat){
+                    /*if(isWchat){
                         //微信浏览器使用APP支付
                         this.onBridgeReady(data.url);
-                    }else{ 
-                        //location.href = data.qrcodeUrl;  //非微信浏览器使用支付宝
-                    }
+                    }else{ */
+                        //location.href = data.url;
+                        common.navigator.push({
+                          url: data.url,
+                          animated: "true"
+                        }, event => {
+                          modal.toast({ message: 'callback: ' + event })
+                        })
+                    //}
 	            }
             })
         },

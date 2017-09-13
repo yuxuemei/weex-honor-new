@@ -6,10 +6,10 @@
                 <text class="clumn-tit">* 余额：</text>
                 <text class="clumn-tit" style="width:60px;">{{mealSum}}枚</text>
                 <image src="http://oslg9bt6h.bkt.clouddn.com/honor/img/medal.png" style="width: 44px;height: 42px;margin-top:24px;margin-left:5px;margin-right:5px;"></image>
-                <text class="price">(价值{{mealSum/4}}元)</text>
+                <text class="price">(价值{{mealSum/5}}元)</text>
             </div>
             <div class="clumn-login row">
-                <input type="password" class="input-login" style="width:650px;" placeholder="请输入你要兑换的勋章数量(最低兑换金额为10元)" />
+                <input type="password" class="input-login" style="width:650px;" placeholder="请输入你要兑换的勋章数量" />
             </div>
             <div class="center">
             	<image src="http://oslg9bt6h.bkt.clouddn.com/honor/img/exchange-submit-btn.png" style="width: 633px;height: 75px;margin-left:59px;margin-top:60px;" @click="exchangeSubmit"></image>

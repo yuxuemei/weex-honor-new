@@ -9,56 +9,59 @@ export default{
     navigator:weex.requireModule('navigator'),
     animation:weex.requireModule('animation'),
     storage:weex.requireModule('storage'),
-    token:'',
-    getToken:function(){
+    //token:'',
+    getToken:function(callback){
         this.storage.getItem('token', event => {
-            this.token = event.data
+            //this.token = event.data;
+            callback(event.data)
         })
     },
     get:function(obj){
-        this.getToken();
-        return this.stream.fetch({
-          method: 'GET',
-          type:"json",
-          headers:{
-            'Authorization': this.token,
-            "Content-Type":"application/json"
-          },
-          url: 'https://api.91war.com/' + obj.url
-        },function(res){
-            if(res.ok){
-                obj.callback(res);
-            }else{
-                if(res.data.info == "没有登录,请登录!"){
-                    router.push("login");
+        this.getToken(token =>{
+            return this.stream.fetch({
+              method: 'GET',
+              type:"json",
+              headers:{
+                'Authorization': token,
+                "Content-Type":"application/json"
+              },
+              url: 'https://api.91war.com/' + obj.url
+            },function(res){
+                if(res.ok){
+                    obj.callback(res);
                 }else{
-                    this.modal.toast({ message: res.data.info})
+                    if(res.data.info == "没有登录,请登录!"){
+                        //router.push("login");
+                    }else{
+                        this.modal.toast({ message: res.data.info})
+                    }
                 }
-            }
-        })
+            })
+        });
     },
     post:function(obj){
-        this.getToken();
-        return this.stream.fetch({
-          method: 'POST',
-          type:"json",
-          headers:{
-            'Authorization': this.token,
-            "Content-Type":"application/json"
-          },
-          url: 'https://api.91war.com/' + obj.url,
-          body:obj.param
-        },res =>{
-            if(res.ok){
-                obj.callback(res);
-            }else{
-                if(res.data.info == "没有登录,请登录!"){
-                    router.push("login");
+        this.getToken(token => {
+            return this.stream.fetch({
+              method: 'POST',
+              type:"json",
+              headers:{
+                'Authorization': token,
+                "Content-Type":"application/json"
+              },
+              url: 'https://api.91war.com/' + obj.url,
+              body:obj.param
+            },res =>{
+                if(res.ok){
+                    obj.callback(res);
                 }else{
-                    this.modal.toast({ message: res.data.info})
+                    if(res.data.info == "没有登录,请登录!"){
+                        router.push("login");
+                    }else{
+                        this.modal.toast({ message: res.data.info})
+                    }
                 }
-            }
-        })
+            })
+        });
     },
     jump:function(url){
         router.push(url);
@@ -95,12 +98,12 @@ export default{
         }
         return base+fileName;
     },
-    isWechat:function () {
+    /*isWechat:function () {
         var ua = window.navigator.userAgent.toLowerCase(); 
         if (ua.match(/MicroMessenger/i) == 'micromessenger') { 
             return true; 
         } else { 
             return false; 
         } 
-    }
+    }*/
 }

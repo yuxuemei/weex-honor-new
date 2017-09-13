@@ -41,7 +41,7 @@
 			}
 		},
 	    mounted:function(){
-	    	this.getHonorInfo();
+	    	this.getHonorStatus();
 	    	/*var element = this.$refs.stone;
 	        common.animation.transition(element, {
 		        styles: {
@@ -67,7 +67,20 @@
 	        },
 	        enterMeal:function(){
 	        	common.jump("/meal");
-	        }
+	        },
+	        getHonorStatus(){
+    			common.get({
+                	url:"api/honor/info",
+                	callback:respose=>{
+                		//跳转到用户相应状态的页面中
+                        if(respose.data.data.hasIn != 0){
+                            common.jump("/my");
+                        }else{
+	    	                this.getHonorInfo();
+                        }
+	                }
+                })
+	        },
 	    }
     }
 </script>
